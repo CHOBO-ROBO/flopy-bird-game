@@ -1,23 +1,44 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Birdy : MonoBehaviour
 {
-    private CharacterController controller;
+  public GameObject lookAtPoint;
 
-    private const float gravity = 15f;
-    private Vector3 velocity = new Vector3 (0, 0, 0);
-    // Start is called before the first frame update
-    void Start()
-    {
-       controller = GetComponent<CharacterController>(); 
-    }
+  private Animator _animator;
 
-    // Update is called once per frame
-    void Update()
+  private const float _gravity = 15f;
+  private const float _velocityBoost = 8f;
+  private Vector3 _velocity = new Vector3(0, 0, 0);
+
+  void Start()
+  {
+    _animator = GetComponent<Animator>();
+  }
+
+  void Update()
+  {
+    _velocity.y -= _gravity * Time.deltaTime;
+
+    if (Input.GetKeyDown("space"))
     {
-        velocity.y -= gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+      _velocity.y = _velocityBoost;
+
+      _animator.SetTrigger("Flap");
     }
+    transform.Translate(_velocity * Time.deltaTime, Space.World);
+  }
+
+  public void OnFlappingStart()
+  {
+    Debug.Log("gamer time");
+    transform.LookAt(lookAtPoint.transform);
+  }
+
+  public void OnFlappingFinish()
+  {
+    Debug.Log("gamer date");
+    transform.eulerAngles = new Vector3(0, 0, 0);
+  }
 }
