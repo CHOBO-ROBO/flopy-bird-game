@@ -6,6 +6,8 @@ public class Birdy : MonoBehaviour
 {
   public GameObject lookAtPoint;
 
+  public bool isAlive = true;
+
   private Animator _animator;
 
   private const float _gravity = 15f;
@@ -32,13 +34,25 @@ public class Birdy : MonoBehaviour
 
   public void OnFlappingStart()
   {
-    Debug.Log("gamer time");
+
     transform.LookAt(lookAtPoint.transform);
   }
 
   public void OnFlappingFinish()
   {
-    Debug.Log("gamer date");
+
     transform.eulerAngles = new Vector3(0, 0, 0);
+  }
+  private void OnTriggerEnter(Collider other)
+  {
+    // Drop bird
+    if (isAlive)
+    {
+      Debug.Log("the bird hit " + other.name);
+      isAlive = false;
+
+    }
+
+    // Stop pipes and scenery movement
   }
 }
